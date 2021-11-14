@@ -32,7 +32,7 @@ pipeline {
         stage('build') {
                     steps {
                         echo "hello"
-                        ls
+                        sh 'ls'
                        
                         // echo "${GIT_COMMIT_MSG}"
                 }
