@@ -1,6 +1,6 @@
 pipeline {
        environment {
-            TAG=""
+            TAG="1.0"
             registry = '333923656856.dkr.ecr.eu-central-1.amazonaws.com'
             registryCredential = 'ECR'
             VER = 1.0
@@ -31,10 +31,21 @@ pipeline {
         // }
         stage('build') {
                     steps {
-                        echo "hello"
-                        sh 'ls'
-                       
-                        // echo "${GIT_COMMIT_MSG}"
+                        sh """
+                        docker build -t tasksapp:"${TAG}" .
+                        """
+                }
+            }
+        stage('e2e-test') {
+                when { branch 'master' }
+                steps {
+                    sh """
+                    docker-compose up -d
+                    docker logs pythontest
+                    docker tag tasksapp:"${TAG}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\${TAG} 
+                    curl http://\${ec2ip}:80
+                    docker-compose down
+                    """
                 }
             }
         // stage('push to ECR') {
@@ -93,23 +104,23 @@ pipeline {
             
     }      
     post {
-        always {
-            withCredentials([[
-            $class: 'AmazonWebServicesCredentialsBinding',
-            credentialsId: "${registryCredential}",
-            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-            ]]) {
-                sshagent(credentials:['tedsearch']) {
-                    sh """
-                    cd terraform
-                    terraform destroy --auto-approve
-                    """
-                }
-            }
-            deleteDir() /* clean up our workspace */
+        // always {
+        //     withCredentials([[
+        //     $class: 'AmazonWebServicesCredentialsBinding',
+        //     credentialsId: "${registryCredential}",
+        //     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+        //     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+        //     ]]) {
+        //         sshagent(credentials:['tedsearch']) {
+        //             sh """
+        //             cd terraform
+        //             terraform destroy --auto-approve
+        //             """
+        //         }
+        //     }
+        //     deleteDir() /* clean up our workspace */
 
-        }
+        // }
         success {
                 updateGitlabCommitStatus name: 'build', state: 'success'
 
