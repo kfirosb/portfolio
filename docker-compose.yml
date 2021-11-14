@@ -1,0 +1,41 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+        MONGODB_ROOT_PASSWORD: root
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - 27017
+    networks:
+      - frontend
+    volumes:
+      - mongodb22:/data/mongo  
+  app:
+    build: .
+    ports:
+      - 5000
+    depends_on:
+      - "mongo"
+    networks:
+      - frontend
+  
+  nginxfront:
+    image: nginx:stable-alpine
+    networks:
+      - frontend   
+    volumes:
+      # - ./lavagnafile/src/main/webapp:/usr/share/nginx/webapp
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    depends_on:
+      - "app"
+
+
+volumes:
+  mongodb22:
+networks:
+  frontend:
