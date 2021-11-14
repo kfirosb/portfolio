@@ -51,7 +51,7 @@ pipeline {
         stage('tag') {
                 // when { branch 'release/*' }
                 steps {
-                    checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitlab', url: 'git@web:kfir/product.git']]])
+                    checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/kfirosb/portfolio.git']]])
                 // sh"""
                 // chmod 777 pushfile.sh
                 // ./pushfile.sh $BRANCH_NAME
