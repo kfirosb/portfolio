@@ -32,6 +32,7 @@ pipeline {
         stage('build') {
                     steps {
                         echo "hello"
+                        ls
                        
                         // echo "${GIT_COMMIT_MSG}"
                 }
@@ -92,23 +93,23 @@ pipeline {
             
     }      
     post {
-        // always {
-        //     withCredentials([[
-        //     $class: 'AmazonWebServicesCredentialsBinding',
-        //     credentialsId: "${registryCredential}",
-        //     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-        //     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        //     ]]) {
-        //         sshagent(credentials:['tedsearch']) {
-        //             sh """
-        //             cd terraform
-        //             terraform destroy --auto-approve
-        //             """
-        //         }
-        //     }
-        //     deleteDir() /* clean up our workspace */
+        always {
+            withCredentials([[
+            $class: 'AmazonWebServicesCredentialsBinding',
+            credentialsId: "${registryCredential}",
+            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+            ]]) {
+                sshagent(credentials:['tedsearch']) {
+                    sh """
+                    cd terraform
+                    terraform destroy --auto-approve
+                    """
+                }
+            }
+            deleteDir() /* clean up our workspace */
 
-        // }
+        }
         success {
                 updateGitlabCommitStatus name: 'build', state: 'success'
 
