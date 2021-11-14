@@ -104,7 +104,7 @@ pipeline {
             
     }      
     post {
-        // always {
+        always {
         //     withCredentials([[
         //     $class: 'AmazonWebServicesCredentialsBinding',
         //     credentialsId: "${registryCredential}",
@@ -118,9 +118,10 @@ pipeline {
         //             """
         //         }
         //     }
-        //     deleteDir() /* clean up our workspace */
+            docker-compose up -d
+            deleteDir() /* clean up our workspace */
 
-        // }
+        }
         success {
                 updateGitlabCommitStatus name: 'build', state: 'success'
 
