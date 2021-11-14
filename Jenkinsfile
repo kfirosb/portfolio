@@ -76,13 +76,13 @@ pipeline {
                          '''
                 }
             
-                #git clean -i
-                #git pull
-                #git checkout \$BRANCH_NAME
-                #git pull
-                #git config user.email "foo@bar.com"
-                #git config user.name "kfir"
-                #git tag \$TAG
+                // #git clean -i
+                // #git pull
+                // #git checkout \$BRANCH_NAME
+                // #git pull
+                // #git config user.email "foo@bar.com"
+                // #git config user.name "kfir"
+                // #git tag \$TAG
                 
             }
                 
