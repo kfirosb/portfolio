@@ -118,7 +118,7 @@ pipeline {
         //             """
         //         }
         //     }
-            docker-compose up -d
+            sh 'docker-compose down'
             deleteDir() /* clean up our workspace */
 
         }
