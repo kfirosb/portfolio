@@ -6,8 +6,8 @@ pipeline {
             VER = 1.0
             AWS_DEFAULT_REGION="eu-central-1"
             OUTPUT="json"
-            awsssh= "ec2-user@ec2-18-156-165-120.eu-central-1.compute.amazonaws.com"
-            ec2ip = "3.66.216.182"
+            awsssh= "ec2-user@ec2-3-70-24-128.eu-central-1.compute.amazonaws.com"
+            ec2ip = "3.70.24.128"
             PUBLICIP= ""
             IAM="333923656856"
             branch = "${BRANCH_NAME}"
@@ -41,9 +41,9 @@ pipeline {
                 steps {
                     sh """
                     docker-compose up -d
-                    docker logs pythontest
-                    docker tag tasksapp:"${TAG}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\${TAG} 
+                    sleep 10
                     curl http://\${ec2ip}:80
+                    #docker tag tasksapp:"${TAG}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\${TAG} 
                     docker-compose down
                     """
                 }
