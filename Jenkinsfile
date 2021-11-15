@@ -84,6 +84,7 @@ pipeline {
                     git config user.email "foo@bar.com"
                     git config user.name "kfir"
                     git tag \$TAG
+                    git push origin --tags
                 """
             }
                 
