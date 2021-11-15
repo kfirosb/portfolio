@@ -5,7 +5,7 @@ import socket
 import pymongo
 
 app = Flask(__name__)
-mongodb = pymongo.MongoClient("mongodb://root:@mongodb:27017/admin")
+mongodb = pymongo.MongoClient("mongodb://root:root@mongodb:27017/admin")
 db = mongodb['dev']
 kfir = db['tasks']
 
