@@ -68,9 +68,9 @@ pipeline {
                             chmod 777 pushfile.sh
                             ./pushfile.sh $BRANCH_NAME
                             TAG=\$(cat tag.txt)
-                            echo "${TAG}"
+                            echo \$TAG
                         fi
-                        docker tag tasksapp:"${TAG}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:"${TAG}"
+                        docker tag tasksapp:\$TAG 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
                         """
                 }
             }
