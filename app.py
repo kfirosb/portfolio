@@ -1,13 +1,24 @@
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from dotenv import load_dotenv
 import socket
 import pymongo
-
+import os
+load_dotenv()
+global database_url
+global database
+global collection
+global  port_p
+database_url = os.environ.get('DATABASE_URL')
+database = os.environ.get('DATABASE')
+collection = os.environ.get('COLLECTION')
+port_p = os.environ.get('PORT')
 app = Flask(__name__)
-mongodb = pymongo.MongoClient("mongodb://root:root@mongo:27017/admin")
-db = mongodb['dev']
-kfir = db['tasks']
+
+mongodb = pymongo.MongoClient(database_url)
+db = mongodb[database]
+kfir = db[collection]
 
 @app.route("/")
 def index():
@@ -76,4 +87,6 @@ def delete_all_tasks():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+
+
+    app.run(host="0.0.0.0", port=port_p)
