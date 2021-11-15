@@ -32,7 +32,7 @@ pipeline {
         stage('build') {
                     steps {
                         sh """
-                        docker build -t tasksapp:"${BRANCH_NAME}" .
+                        docker build -t tasksapp:"${BUILD_NUMBER}" .
                         """
                 }
             }
