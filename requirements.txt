@@ -1,3 +1,5 @@
 Flask
 Flask-PyMongo
 requests
+python-dotenv
+#os-sys
