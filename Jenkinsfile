@@ -92,58 +92,9 @@ pipeline {
                 
         }
     }
-
-
-        // stage (' Deploy') {
-        //         when {
-        //             changelog '.*#test*.'
-        //         }   
-        //         steps {
-        //         withCredentials([[
-        //             $class: 'AmazonWebServicesCredentialsBinding',
-        //             credentialsId: "${registryCredential}",
-        //             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-        //             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        //             ]]) {
-        //                 sshagent(credentials:['tedsearch']) {
-        //                     sh """
-        //                     cd terraform
-        //                     terraform init
-        //                     terraform apply --auto-approve
-        //                     echo "\$(terraform output "public_ip")" > publicip.txt
-        //                     """
-        //                 }
-        //             }
-         
-        //         }
-        // }
-
-        // stage('e2e-test') {
-        //     when { changelog '.*#test*.' }
-        //     steps {
-        //         sh """
-        //         publicipp=\$(cat terraform/publicip.txt)
-        //         curl http://\$publicipp:80
-        //         """
-        //     }
-        // }
-            
-         
+      
     post {
         always {
-        //     withCredentials([[
-        //     $class: 'AmazonWebServicesCredentialsBinding',
-        //     credentialsId: "${registryCredential}",
-        //     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-        //     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        //     ]]) {
-        //         sshagent(credentials:['tedsearch']) {
-        //             sh """
-        //             cd terraform
-        //             terraform destroy --auto-approve
-        //             """
-        //         }
-        //     }
             sh 'docker-compose down'
             deleteDir() //clean up our workspace */
 
