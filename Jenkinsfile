@@ -63,13 +63,14 @@ pipeline {
                         aws ecr list-images --repository-name tasksapp
                         if [[ \$BRANCH_NAME==master ]];
                         then
-                            TAGrelease="latest"
+                            TAG="latest"
                         else
                             chmod 777 pushfile.sh
                             ./pushfile.sh $BRANCH_NAME
-                            TAGrelease=\$(cat tag.txt)
+                            TAG=\$(cat tag.txt)
+                            echo "${TAG}"
                         fi
-                        docker tag tasksapp:"${TAGrelease}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:"${TAGrelease}"
+                        docker tag tasksapp:"${TAG}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:"${TAG}"
                         """
                 }
             }
@@ -91,7 +92,7 @@ pipeline {
                 }
                 checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/kfirosb/portfolio.git']]])
                 sh """
-                    git clean -i
+                    #git clean -i
                     #git pull
                     #git checkout \$BRANCH_NAME
                     #git pull
