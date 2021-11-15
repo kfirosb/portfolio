@@ -44,10 +44,12 @@ pipeline {
                         sh """
                         aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
                         aws ecr list-images --repository-name tasksapp
-                        if "${BRANCH_NAME}" == "master" ;
+                        if [[ "${BRANCH_NAME}" == "master" ]];
                         then
                             echo "latest" > tag.txt
-                        else
+                        fi
+                        if [ "${BRANCH_NAME}" == "release*" ];
+                        then
                             chmod 777 pushfile.sh
                             ./pushfile.sh $BRANCH_NAME    
                         fi
