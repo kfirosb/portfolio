@@ -68,8 +68,9 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
                         sh """
+                        TAG=\$(cat tag.txt)
                         aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
-                        docker push 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\${TAG}
+                        docker push 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
                          """
                 }
                 withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
@@ -138,7 +139,7 @@ pipeline {
         //         }
         //     }
             sh 'docker-compose down'
-            deleteDir() //e* clean up our workspace */
+            deleteDir() //clean up our workspace */
 
         }
         success {
