@@ -75,39 +75,21 @@ pipeline {
                         docker push 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\${TAG}
                          """
                 }
-            
-                // #git clean -i
-                // #git pull
-                // #git checkout \$BRANCH_NAME
-                // #git pull
-                // #git config user.email "foo@bar.com"
-                // #git config user.name "kfir"
-                // #git tag \$TAG
-                
+                checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/kfirosb/portfolio.git']]])
+                sh """
+                    git clean -i
+                    git pull
+                    git checkout \$BRANCH_NAME
+                    git pull
+                    git config user.email "foo@bar.com"
+                    git config user.name "kfir"
+                    git tag \$TAG
+                """
             }
                 
         }
     }
-        // stage('push to ECR') {
-        //     when {
-        //         changelog '.*#test*.'
-        //     }
-        //     steps{
-        //         echo "push to ECR stage"
-        //         sh 'docker tag tedsearch:1.1-SNAPSHOT 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tedsearch:1.1-SNAPSHOT'
-        //         withCredentials([[
-        //             $class: 'AmazonWebServicesCredentialsBinding',
-        //             credentialsId: "${registryCredential}",
-        //             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-        //             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        //             ]]) {
-        //                 sh '''
-        //                 aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${registry}
-        //                 docker push 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tedsearch:1.1-SNAPSHOT
-        //                 '''
-        //         }
-        //     }
-        // }
+
 
         // stage (' Deploy') {
         //         when {
