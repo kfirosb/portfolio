@@ -1,6 +1,6 @@
 pipeline {
        environment {
-            TAG="1.0"
+            TAG="1.0.1"
             registry = '333923656856.dkr.ecr.eu-central-1.amazonaws.com'
             registryCredential = 'ECR'
             VER = 1.0
@@ -49,9 +49,20 @@ pipeline {
                 }
             }
         stage('tag') {
-                // when { branch 'release/*' }
+                when { anyOf { branch 'release/*'; branch 'master' } }
                 steps {
-                    checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/kfirosb/portfolio.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/kfirosb/portfolio.git']]])
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: "${registryCredential}",
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]]) {
+                        sh """
+                        aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
+                        aws ecr list-images | --repository-name tasksapp
+                        """
+                }
                 // sh"""
                 // chmod 777 pushfile.sh
                 // ./pushfile.sh $BRANCH_NAME
@@ -61,7 +72,7 @@ pipeline {
                 }
         }
         stage('publis') {
-            // when { branch 'release/*' }
+            when { anyOf { branch 'release/*'; branch 'master' } }
             steps {
                 sh 'echo "push to ECR stage"'
                 withCredentials([[
@@ -83,7 +94,7 @@ pipeline {
                     git pull
                     git config user.email "foo@bar.com"
                     git config user.name "kfir"
-                    // git tag \$TAG
+                    git tag \$TAG
                     git push origin --tags
                 """
             }
