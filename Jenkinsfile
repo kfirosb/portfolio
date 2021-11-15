@@ -33,7 +33,7 @@ pipeline {
                 }
             }
         stage('tag') {
-                when { anyOf { branch 'release/*'; branch 'master' } }
+                when { branch 'release/*' }
                 steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
@@ -44,19 +44,22 @@ pipeline {
                         sh """
                         aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
                         aws ecr list-images --repository-name tasksapp
-                        if [[ "${BRANCH_NAME}" == "master" ]];
-                        then
-                            echo "latest" > tag.txt
-                        fi
-                        if [ "${BRANCH_NAME}" == "release*" ];
-                        then
-                            chmod 777 pushfile.sh
-                            ./pushfile.sh $BRANCH_NAME    
-                        fi
+                        chmod 777 pushfile.sh
+                        ./pushfile.sh $BRANCH_NAME    
                         TAG=\$(cat tag.txt)
                         docker tag tasksapp:"${BUILD_NUMBER}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
                         """
                 }
+            }
+        }
+        stage('tag-master') {
+                when {  branch 'master' }
+                steps {
+                        sh"""                   
+                        echo "latest" > tag.txt
+                        TAG=\$(cat tag.txt)
+                        docker tag tasksapp:"${BUILD_NUMBER}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
+                        """
             }
         }
         stage('publis') {
