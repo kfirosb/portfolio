@@ -66,7 +66,7 @@ pipeline {
                 sh"""
                     if [ \$BRANCH_NAME==master ]
                     then
-                    TAG=latest
+                    TAG="latest"
                     else
                     chmod 777 pushfile.sh
                     ./pushfile.sh $BRANCH_NAME
