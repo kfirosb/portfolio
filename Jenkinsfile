@@ -91,6 +91,9 @@ pipeline {
                          """
                 }
                 checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/kfirosb/portfolio.git']]])
+                withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+    // some block
+
                 sh """
                     #git clean -i
                     #git pull
@@ -101,6 +104,7 @@ pipeline {
                     git tag \$TAG
                     git push --tags
                 """
+                }
             }
                 
         }
