@@ -1,6 +1,6 @@
 pipeline {
        environment {
-            TAG=""
+            TAG="git"
             registry = '333923656856.dkr.ecr.eu-central-1.amazonaws.com'
             registryCredential = 'ECR'
             VER = 1.0
@@ -44,7 +44,7 @@ pipeline {
                         sh """
                         aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
                         aws ecr list-images --repository-name tasksapp
-                        if [ "${BRANCH_NAME}" == "master" ];
+                        if "${BRANCH_NAME}" == "master" ;
                         then
                             echo "latest" > tag.txt
                         else
