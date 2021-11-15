@@ -1,6 +1,6 @@
 pipeline {
        environment {
-            TAG="1.0.2"
+            TAG="1.0.12"
             registry = '333923656856.dkr.ecr.eu-central-1.amazonaws.com'
             registryCredential = 'ECR'
             VER = 1.0
