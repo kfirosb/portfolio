@@ -59,7 +59,17 @@ pipeline {
                         echo "latest" > tag.txt
                         TAG=\$(cat tag.txt)
                         docker tag tasksapp:"${BUILD_NUMBER}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
+                        
                         """
+                    withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+                        sh """
+                        TAG=\$(cat tag.txt)
+                        #git config user.email you@example.com
+                        #git config user.name kfirosb
+                        git tag \$TAG
+                        git push --tags
+                        """
+                        }
             }
         }
         stage('publis') {
@@ -77,15 +87,6 @@ pipeline {
                         aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
                         docker push 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
                          """
-                }
-                withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
-                sh """
-                    TAG=\$(cat tag.txt)
-                    #git config user.email you@example.com
-                    #git config user.name kfirosb
-                    git tag \$TAG
-                    git push --tags
-                """
                 }
             }
                 
