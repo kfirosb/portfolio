@@ -1,6 +1,6 @@
 pipeline {
        environment {
-            TAG="1.0.1"
+            TAG="1.0.2"
             registry = '333923656856.dkr.ecr.eu-central-1.amazonaws.com'
             registryCredential = 'ECR'
             VER = 1.0
@@ -95,7 +95,7 @@ pipeline {
                     git config user.email "foo@bar.com"
                     git config user.name "kfir"
                     git tag \$TAG
-                    // git push origin --tags
+                    # git push origin --tags
                 """
             }
                 
