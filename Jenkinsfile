@@ -64,9 +64,14 @@ pipeline {
                         """
                 }
                 sh"""
-                chmod 777 pushfile.sh
-                ./pushfile.sh $BRANCH_NAME
-                TAG=\$(cat tag.txt)
+                    if [ \$BRANCH_NAME==master ]
+                    then
+                    TAG=latest
+                    else
+                    chmod 777 pushfile.sh
+                    ./pushfile.sh $BRANCH_NAME
+                    TAG=\$(cat tag.txt)
+                    fi
                 """ 
                 sh 'docker tag tasksapp:"${TAG}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:"${TAG}"'
                 }
