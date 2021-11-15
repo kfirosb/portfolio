@@ -60,7 +60,7 @@ pipeline {
                     ]]) {
                         sh """
                         aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
-                        aws ecr list-images | --repository-name tasksapp
+                        aws ecr list-images --repository-name tasksapp
                         """
                 }
                 // sh"""
