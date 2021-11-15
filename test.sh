@@ -1,8 +1,8 @@
 #!/bin/bash
 declare -A list
-first=$(aws ecr list-images --repository-name tasksapp)
-# echo ${first}
-for i in ${first}["imageIds"]
+first=$(aws ecr list-images --repository-name tasksapp | grep 1.0.1 )
+echo ${first}
+for i in "${first["imageIds"]}"
 do
     echo "5"
 done
