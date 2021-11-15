@@ -70,7 +70,7 @@ pipeline {
                             TAG=\$(cat tag.txt)
                             echo \$TAG
                         fi
-                        docker tag tasksapp:\$TAG 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
+                        docker tag tasksapp:"${BUILD_NUMBER}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
                         """
                 }
             }
