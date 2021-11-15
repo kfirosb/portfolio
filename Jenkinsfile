@@ -25,7 +25,7 @@ pipeline {
         stage('e2e-test') {
                 steps {
                     sh """
-                    docker-compose up -d
+                    docker-compose up --build -d
                     sleep 10
                     curl http://\${ec2ip}:80
                     docker-compose down
