@@ -143,7 +143,7 @@ pipeline {
         //         }
         //     }
             sh 'docker-compose down'
-            deleteDir() /e* clean up our workspace */
+            deleteDir() //e* clean up our workspace */
 
         }
         success {
