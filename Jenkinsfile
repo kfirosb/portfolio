@@ -63,13 +63,13 @@ pipeline {
                         aws ecr list-images --repository-name tasksapp
                         if [[ \$BRANCH_NAME==master ]];
                         then
-                            TAG="latest"
+                            TAGrelease="latest"
                         else
                             chmod 777 pushfile.sh
                             ./pushfile.sh $BRANCH_NAME
-                            TAG=\$(cat tag.txt)
+                            TAGrelease=\$(cat tag.txt)
                         fi
-                        docker tag tasksapp:"${TAG}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:"${TAG}"
+                        docker tag tasksapp:"${TAGrelease}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:"${TAGrelease}"
                         """
                 }
             }
@@ -96,7 +96,7 @@ pipeline {
                     #git checkout \$BRANCH_NAME
                     #git pull
                     git config user.email you@example.com
-                    git config user.name kfir
+                    git config user.name kfirosb
                     git tag \$TAG
                     git push --tags
                 """
