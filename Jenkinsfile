@@ -64,7 +64,7 @@ pipeline {
                         """
                 }
                 sh"""
-                    if [ \$BRANCH_NAME==master ]
+                    if [[ \$BRANCH_NAME==master ]];
                     then
                         TAG="latest"
                     else
@@ -97,10 +97,10 @@ pipeline {
                     git pull
                     git checkout \$BRANCH_NAME
                     git pull
-                    git config user.email "foo@bar.com"
-                    git config user.name "kfir"
+                    git config user.email you@example.com
+                    git config user.name kfir
                     git tag \$TAG
-                    # git push origin --tags
+                    git push origin --tags
                 """
             }
                 
