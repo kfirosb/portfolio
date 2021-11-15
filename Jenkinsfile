@@ -95,8 +95,8 @@ pipeline {
 
                 sh """
                     TAG=\$(cat tag.txt)
-                    // git config user.email you@example.com
-                    // git config user.name kfirosb
+                    #git config user.email you@example.com
+                    #git config user.name kfirosb
                     git tag \$TAG
                     git push --tags
                 """
