@@ -83,7 +83,7 @@ pipeline {
                     git pull
                     git config user.email "foo@bar.com"
                     git config user.name "kfir"
-                    git tag \$TAG
+                    // git tag \$TAG
                     git push origin --tags
                 """
             }
@@ -143,7 +143,7 @@ pipeline {
         //         }
         //     }
             sh 'docker-compose down'
-            // deleteDir() /e* clean up our workspace */
+            deleteDir() /e* clean up our workspace */
 
         }
         success {
