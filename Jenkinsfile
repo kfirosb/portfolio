@@ -68,7 +68,6 @@ pipeline {
                             chmod 777 pushfile.sh
                             ./pushfile.sh $BRANCH_NAME
                             TAG=\$(cat tag.txt)
-                            echo \$TAG
                         fi
                         docker tag tasksapp:"${BUILD_NUMBER}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
                         """
@@ -90,17 +89,14 @@ pipeline {
                         docker push 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\${TAG}
                          """
                 }
-                checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/kfirosb/portfolio.git']]])
+                // checkout([$class: 'GitSCM', branches: [[name: '$BRANCH_NAME']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/kfirosb/portfolio.git']]])
                 withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
     // some block
 
                 sh """
-                    #git clean -i
-                    #git pull
-                    #git checkout \$BRANCH_NAME
-                    #git pull
-                    git config user.email you@example.com
-                    git config user.name kfirosb
+                    TAG=\$(cat tag.txt)
+                    // git config user.email you@example.com
+                    // git config user.name kfirosb
                     git tag \$TAG
                     git push --tags
                 """
