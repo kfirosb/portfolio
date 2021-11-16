@@ -24,7 +24,7 @@ kfir = db[collection]
 def index():
     hostname = socket.gethostname()
     return jsonify(
-        message="Welcome to Tasks app round 2! I am running inside {} pod!".format(hostname)
+        message="Welcome to Tasks app round 3! I am running inside {} pod!".format(hostname)
     )
 
 
