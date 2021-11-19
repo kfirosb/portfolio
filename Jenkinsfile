@@ -1,10 +1,12 @@
 pipeline {
        environment {
             TAG="git"
-            registry = '333923656856.dkr.ecr.eu-central-1.amazonaws.com'
+            registry = '006262944085.dkr.ecr.eu-west-1.amazonaws.com'
+            imagename   = 'tasksapp'
+            region  =   'eu-west-1'
             registryCredential = 'ECR'
             VER = 1.0
-            AWS_DEFAULT_REGION="eu-central-1"
+            AWS_DEFAULT_REGION="eu-west-1"
             OUTPUT="json"
             awsssh= "ec2-3-70-2-177.eu-central-1.compute.amazonaws.com"
             ec2ip = "3.70.2.177"
@@ -18,7 +20,7 @@ pipeline {
         stage('build') {
                     steps {
                         sh """
-                        docker build -t tasksapp:"${BUILD_NUMBER}" .
+                        docker build -t \$imagename:"${BUILD_NUMBER}" .
                         """
                 }
             }
@@ -42,12 +44,12 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
                         sh """
-                        aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
-                        aws ecr list-images --repository-name tasksapp
+                        aws ecr get-login-password --region \${region} | docker login --username AWS --password-stdin \${registry}
+                        aws ecr list-images --repository-name \$imagename
                         chmod 777 pushfile.sh
                         ./pushfile.sh $BRANCH_NAME    
                         TAG=\$(cat tag.txt)
-                        docker tag tasksapp:"${BUILD_NUMBER}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
+                        docker tag \$imagename:"${BUILD_NUMBER}" \$registry/\$imagename:\$TAG
                         """
                         withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
                         sh """
@@ -67,7 +69,7 @@ pipeline {
                         sh"""                   
                         echo "latest" > tag.txt
                         TAG=\$(cat tag.txt)
-                        docker tag tasksapp:"${BUILD_NUMBER}" 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
+                        docker tag \$imagename:"${BUILD_NUMBER}" \$registry/\$imagename:\$TAG
                         
                         """
             }
@@ -84,8 +86,8 @@ pipeline {
                     ]]) {
                         sh """
                         TAG=\$(cat tag.txt)
-                        aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin \${registry}
-                        docker push 333923656856.dkr.ecr.eu-central-1.amazonaws.com/tasksapp:\$TAG
+                        aws ecr get-login-password --region \${region} | docker login --username AWS --password-stdin \${registry}
+                        docker push \$registry/\$imagename:\$TAG
                          """
                 }
             }
