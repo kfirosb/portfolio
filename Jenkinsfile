@@ -8,8 +8,8 @@ pipeline {
             VER = 1.0
             AWS_DEFAULT_REGION="eu-west-1"
             OUTPUT="json"
-            awsssh= "ec2-3-70-2-177.eu-central-1.compute.amazonaws.com"
-            ec2ip = "3.70.2.177"
+            awsssh= "ec2-18-156-137-222.eu-central-1.compute.amazonaws.com"
+            ec2ip = "18.156.137.222"
             PUBLICIP= ""
             IAM="333923656856"
             branch = "${BRANCH_NAME}"
