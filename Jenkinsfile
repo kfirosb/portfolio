@@ -4,7 +4,7 @@ pipeline {
             registry = '006262944085.dkr.ecr.eu-west-1.amazonaws.com'
             imagename   = 'tasksapp'
             region  =   'eu-west-1'
-            registryCredential = 'ECR'
+            registryCredential = 'aws-ecr-develeap-user'
             VER = 1.0
             AWS_DEFAULT_REGION="eu-west-1"
             OUTPUT="json"
