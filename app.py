@@ -9,16 +9,16 @@ load_dotenv()
 global database_url
 global database
 global collection
-global  port_p
+global port_p
 database_url = os.environ.get('DATABASE_URL')
 database = os.environ.get('DATABASE')
 collection = os.environ.get('COLLECTION')
-port_p = os.environ.get('PORT')
+port_p = int(os.environ.get('PORT', 5000))
 app = Flask(__name__)
 
 mongodb = pymongo.MongoClient(database_url)
 db = mongodb[database]
-kfir = db[collection]
+tasks_collection = db[collection]
 
 @app.route("/")
 def index():
@@ -30,8 +30,7 @@ def index():
 
 @app.route("/tasks")
 def get_all_tasks():
-    kfir.insert_one({'title':"to do"})
-    tasks = db.task.find()
+    tasks = tasks_collection.find()
     data = []
     for task in tasks:
         item = {
@@ -47,7 +46,7 @@ def get_all_tasks():
 @app.route("/task", methods=["POST"])
 def create_task():
     data = request.get_json(force=True)
-    db.task.insert_one({"task": data["task"]})
+    tasks_collection.insert_one({"task": data["task"]})
     return jsonify(
         message="Task saved successfully!"
     )
@@ -56,7 +55,7 @@ def create_task():
 @app.route("/task/<id>", methods=["PUT"])
 def update_task(id):
     data = request.get_json(force=True)["task"]
-    response = db.task.update_one({"_id": ObjectId(id)}, {"$set": {"task": data}})
+    response = tasks_collection.update_one({"_id": ObjectId(id)}, {"$set": {"task": data}})
     if response.matched_count:
         message = "Task updated successfully!"
     else:
@@ -68,7 +67,7 @@ def update_task(id):
 
 @app.route("/task/<id>", methods=["DELETE"])
 def delete_task(id):
-    response = db.task.delete_one({"_id": ObjectId(id)})
+    response = tasks_collection.delete_one({"_id": ObjectId(id)})
     if response.deleted_count:
         message = "Task deleted successfully!"
     else:
@@ -80,7 +79,7 @@ def delete_task(id):
 
 @app.route("/tasks/delete", methods=["POST"])
 def delete_all_tasks():
-    db.task.remove()
+    tasks_collection.delete_many({})
     return jsonify(
         message="All Tasks deleted!"
     )
